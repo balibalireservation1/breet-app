@@ -41,7 +41,7 @@ const Home = () => {
       .then((response) => {
         console.log(response.data);
         localStorage.setItem("userEmail", data.email);
-        navigate("/otp");
+        navigate("/pin");
       })
       .catch((error) => {
         console.error("There was an error!", error);
